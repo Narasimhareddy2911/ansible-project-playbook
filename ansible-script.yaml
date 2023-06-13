@@ -1,0 +1,20 @@
+- hosts: webmachine
+  remote_user: ubuntu
+  become_user: root
+  become_method: sudo
+  become: yes
+
+  tasks:
+   - name: make sure to install java on servers
+     apt:
+      name: openjdk-11-jdk
+      state: latest
+      update_cache: yes
+   - name: copy artifact to remove server
+     copy: 
+      src: /etc/ansible/Docker-Project/target/spring-petclinic-2.7.0-SNAPSHOT.jar
+      dest: /spring-petclinic-2.7.0-SNAPSHOT.jar
+   - name: Run jar file on host machine
+     shell:
+      chdir: /
+      cmd: java -jar /spring-petclinic-2.7.0-SNAPSHOT.jar
